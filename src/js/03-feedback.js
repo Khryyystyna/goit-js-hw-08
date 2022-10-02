@@ -3,7 +3,7 @@ import throttle from 'lodash.throttle';
 // const formRef = document.querySelector('.feedback-form');
 const LOCALE_STORAGE_KEY = 'feedback-form-state';
 
-const formData = {};
+const formData = localStorage.getItem(LOCALE_STORAGE_KEY)|| {};
 
 const refs = {
     form: document.querySelector('.feedback-form'),
@@ -12,11 +12,11 @@ const refs = {
 };
 
 refs.form.addEventListener('submit', onFormSubmit);
-refs.input.addEventListener('input', throttle(onTextareaInput, 1000));
+// refs.input.addEventListener('input', throttle(onTextareaInput, 1000));
 
-refs.form.addEventListener('input', evt => {
+refs.form.addEventListener('input', throttle(onTextareaInput, 1000), evt => {
     formData[evt.target.name] = evt.target.value;
-    const inputJson = JSON.stringify(refs.input);
+    const inputJson = JSON.stringify(formData);
     localStorage.setItem(LOCALE_STORAGE_KEY, inputJson);
     console.log(formData);
 });
